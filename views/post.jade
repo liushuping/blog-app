@@ -1,0 +1,20 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/stylesheets/github-markdown.css')
+  link(rel='stylesheet', href='/stylesheets/post.css')
+
+block content
+  h1= title
+  p.post.meta= created_on
+  div.clear
+  .markdown-body!= body
+  div.ds-thread(data-thred-key= thread, data-title= title, data-author-key= 'liushuping', data-form-position= 'top')
+
+block body_script
+  script(type='text/javascript').
+    var duoshuoQuery = {
+      short_name: "liushuping"
+    };
+
+  script(src='http://static.duoshuo.com/embed.js')

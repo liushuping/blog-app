@@ -1,0 +1,13 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/stylesheets/index.css')
+
+block content
+  h1= title
+  a(href='/rss.xml')
+    img#rss(src='/img/rss.png', alt='rss')
+
+  each post in posts
+    h2
+      a(href='/' + post.id)= post.title

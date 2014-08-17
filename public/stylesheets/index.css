@@ -1,0 +1,21 @@
+a {
+    text-decoration: none;
+    background: transparent;
+}
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+#rss {
+    width: 32px;
+    height: 32px;
+    border-radius: 20%;
+}
+
+#rss:hover {
+    transform: rotate(20deg);
+    -moz-transform: rotate(20deg);
+    -webkit-transform: rotate(20deg);
+}
