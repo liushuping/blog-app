@@ -18,6 +18,7 @@
     "leveldown": "^0.10.2",
     "marked": "*",
     "morgan": "~1.0.0",
+    "request": "^2.40.0",
     "rss": "^0.3.2",
     "sitemap": "^0.7.3",
     "static-favicon": "~1.0.0"

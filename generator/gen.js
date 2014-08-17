@@ -1,24 +1,12 @@
-var user = process.argv[2],
-    repo = process.argv[3],
-    GitHubApi = require('github'),
-    level = require('level'),
-    leveldown = require('leveldown'),
-    marked = require('marked');
-    issuesDB = level('../db/issues');
-
-    github = new GitHubApi({
-        version: '3.0.0',
-        protocol: 'https',
-    }),
-
-    updateOption = {
-	    valueEncoding: 'json'
-    },
-
-    issueMsg = {
-        user: user,
-        repo: repo
-    };
+var level = require('level');
+var marked = require('marked');
+var request = require('request');
+var postsDB = level('../db/posts');
+var leveldown = require('leveldown');
+var updateOption = {
+   valueEncoding: 'json'
+};
+var path = 'https://raw.githubusercontent.com/liushuping/blog/master/posts/';
     
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -32,44 +20,42 @@ marked.setOptions({
 });
 
 function destroyDB(callback) {
-    leveldown.destroy('../db/issues', function(err) {
+    leveldown.destroy('../db/posts', function(err) {
         if (err) {
             console.log(err);
         } else {
-            console.log('../db/issues is destroyed');
+            console.log('../db/posts is destroyed');
             (callback instanceof Function) && callback();
         }
     });
 }
 
-function updateAnIssue(issue) {
-    console.log('update issue ', issue.number, ' :', issue.title);
-    issue.body = marked(issue.body);
-    issuesDB.put(issue.number, issue, updateOption, function (err) {
-	    if (err) {
-	        console.log(err);
-	    }
+function updateAnPost(post) {
+    fetchAPost(post.path, function(body) {
+        var pattern = /^\s*#\s+(.+)$/m;
+        var matches = pattern.exec(body);
+        
+        post.title = matches[1];
+        post.slug = post.title;
+        post.body = marked(body.replace(pattern, ''));
+        postsDB.put(post.id, post, updateOption, function (err) {
+            console.log('update post ', post.id, ' :', post.slug);
+            if (err) {
+                console.log(err);
+            }
+        });
     });
 }
 
-function processIssues(issues) {
-    var i, len, title;
-
-    for (i = 0, len = issues.length; i < len; i++) {
-        title = issues[i].title;
-
-        if (/.*\s+draft\s*$/i.test(title)) {
-            continue;
-        }
-
-        updateAnIssue(issues[i]);
-    }
+function fetchAPost(url, callback) {
+    request(path + url, function(err, res, body) {
+        (callback instanceof Function) && callback(body);
+    });
 }
 
-github.issues.repoIssues(issueMsg, function(err, issues) {
-    if (err) {
-        console.log(err);
-    } else {
-    	processIssues(issues);	
-    }
+request(path + 'post-config.json', function(err, res, body) {
+console.log(body);
+    var postConfig = JSON.parse(body);
+console.log(postConfig);
+    postConfig.publishes.forEach(updateAnPost);
 });
