@@ -6,7 +6,7 @@ var leveldown = require('leveldown');
 var updateOption = {
    valueEncoding: 'json'
 };
-var path = 'https://raw.githubusercontent.com/liushuping/blog/master/posts/';
+var path = 'https://raw.githubusercontent.com/liushuping/blog/master/';
     
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -48,7 +48,7 @@ function updateAnPost(post) {
 }
 
 function fetchAPost(url, callback) {
-    request(path + url, function(err, res, body) {
+    request(path + 'posts/' + url, function(err, res, body) {
         (callback instanceof Function) && callback(body);
     });
 }
