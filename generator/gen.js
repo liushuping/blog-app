@@ -53,9 +53,7 @@ function fetchAPost(url, callback) {
     });
 }
 
-request(path + 'post-config.json', function(err, res, body) {
-console.log(body);
+request(path + 'posts.json', function(err, res, body) {
     var postConfig = JSON.parse(body);
-console.log(postConfig);
     postConfig.publishes.forEach(updateAnPost);
 });
