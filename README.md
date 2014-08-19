@@ -1,4 +1,4 @@
 blog-app
 ========
 
-liushuping's blog application
+liushuping's personal blog application
