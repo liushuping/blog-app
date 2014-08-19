@@ -30,8 +30,8 @@ function destroyDB(callback) {
     });
 }
 
-function updateAnPost(post) {
-    fetchAPost(post.path, function(body) {
+function updateAnPost(folder, post) {
+    fetchAPost(path + folder + '/' + post.path, function(body) {
         var pattern = /^\s*#\s+(.+)$/m;
         var matches = pattern.exec(body);
         
@@ -48,12 +48,14 @@ function updateAnPost(post) {
 }
 
 function fetchAPost(url, callback) {
-    request(path + 'posts/' + url, function(err, res, body) {
+    request(url, function(err, res, body) {
         (callback instanceof Function) && callback(body);
     });
 }
 
 request(path + 'posts.json', function(err, res, body) {
     var postConfig = JSON.parse(body);
-    postConfig.publishes.forEach(updateAnPost);
+    postConfig['2014'].forEach(function(post) {
+        updateAnPost('2014', post);
+    });
 });
