@@ -55,7 +55,11 @@ function fetchAPost(url, callback) {
 
 request(path + 'posts.json', function(err, res, body) {
     var postConfig = JSON.parse(body);
-    postConfig['2014'].forEach(function(post) {
-        updateAnPost('2014', post);
-    });
+    for (var key in postConfig) {
+        if (/\d{4}/.test(key)) {
+            postConfig[key].forEach(function(post) {
+                updateAnPost(key, post);
+            });
+        }
+    }
 });
