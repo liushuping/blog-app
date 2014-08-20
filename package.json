@@ -13,6 +13,7 @@
     "express": "~4.2.0",
     "express-params": "*",
     "github": "*",
+    "highlight.js": "^8.1.0",
     "jade": "~1.3.0",
     "level": "*",
     "leveldown": "^0.10.2",
