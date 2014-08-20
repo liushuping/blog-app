@@ -3,7 +3,6 @@ var marked = require('marked');
 var request = require('request');
 var postsDB = level('../db/posts');
 var leveldown = require('leveldown');
-var highlight = require('./highlight');
 var updateOption = {
    valueEncoding: 'json'
 };
@@ -39,7 +38,6 @@ function updateAnPost(folder, post) {
         post.title = matches[1];
         post.slug = post.title;
         post.body = marked(body.replace(pattern, ''));
-	post.body = highlight.highlightAuto(post.body).value;
         postsDB.put(post.id, post, updateOption, function (err) {
             console.log('update post ', post.id, ' :', post.slug);
             if (err) {
