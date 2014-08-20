@@ -1,47 +1,29 @@
 var level = require('level');
-var marked = require('marked');
+var cheerio = require('cheerio');
 var request = require('request');
 var postsDB = level('../db/posts');
 var leveldown = require('leveldown');
-var highlight = require('highlight.js').highlight;
-var updateOption = {
-   valueEncoding: 'json'
-};
-var path = 'https://raw.githubusercontent.com/liushuping/blog/master/';
+var path = 'https://github.com/liushuping/blog/blob/master/';
+var postsPath = 'https://raw.githubusercontent.com/liushuping/blog/master/posts.json';
     
-marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false
-});
-
-function destroyDB(callback) {
-    leveldown.destroy('../db/posts', function(err) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('../db/posts is destroyed');
-            (callback instanceof Function) && callback();
-        }
-    });
-}
-
 function updateAnPost(folder, post) {
     fetchAPost(path + folder + '/' + post.path, function(body) {
-        var pattern = /^\s*#\s+(.+)$/m;
-        var matches = pattern.exec(body);
-        
-        post.title = matches[1];
-        post.slug = post.title;
-        post.body = marked(body.replace(pattern, ''));
-        post.body = highlight(post.body, null, true);
-        postsDB.put(post.id, post, updateOption, function (err) {
-            console.log('update post ', post.id, ' :', post.slug);
+        var article = {};
+        var $ = cheerio.load(body);
+
+        article.id = post.id;
+        article.tags = post.tags;
+        article.title = $('article h1').text().trim();
+        article.slug = article.title;
+	article.created_on = post.created_on;
+ 
+        $ = cheerio.load($('article').html());
+        $('h1').remove();
+        article.body = $.html();
+
+        var options = { valueEncoding: 'json' };
+        postsDB.put(article.id, article, options, function (err) {
+            console.log('update post ', article.id, ' :', article.slug);
             if (err) {
                 console.log(err);
             }
@@ -55,7 +37,7 @@ function fetchAPost(url, callback) {
     });
 }
 
-request(path + 'posts.json', function(err, res, body) {
+request(postsPath, function(err, res, body) {
     var postConfig = JSON.parse(body);
     for (var key in postConfig) {
         if (/\d{4}/.test(key)) {
