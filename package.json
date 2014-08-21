@@ -18,7 +18,7 @@
     "morgan": "~1.0.0",
     "request": "^2.40.0",
     "rss": "^0.3.2",
-    "sitemap": "^0.7.3",
-    "static-favicon": "~1.0.0"
+    "serve-favicon": "^2.0.1",
+    "sitemap": "^0.7.3"
   }
 }
