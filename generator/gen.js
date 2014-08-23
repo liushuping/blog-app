@@ -8,13 +8,11 @@ var postsPath = 'https://raw.githubusercontent.com/liushuping/blog/master/posts.
 function updateAnPost(folder, post) {
     fetchAPost(path + folder + '/' + post.path, function(body) {
         var $ = cheerio.load(body);
-
-        post.title = $('article h1').text().trim();
-        post.slug = post.title;
+        var extracted = extract(body);
  
-        $ = cheerio.load($('article').html());
-        $('h1').remove();
-        post.body = $.html();
+        post.title = extracted.title;
+        post.slug = post.title;
+        post.body = extracted.article;
 
         var options = { valueEncoding: 'json' };
         postsDB.put(post.id, post, options, function (err) {
@@ -24,6 +22,34 @@ function updateAnPost(folder, post) {
             }
         });
     });
+}
+
+function extract(body) {
+    var replacement = String.fromCharCode(160);
+    replacement += String.fromCharCode(161);
+    replacement += String.fromCharCode(162);
+    replacement += String.fromCharCode(163);
+
+    var pattern = new RegExp(replacement, 'g');
+
+    body = removeSpaces(body);
+    body = body.replace(/\n/g, replacement);
+    var article = body.match(/<article.*>.+<\/article>/)[0];
+    var title = article.match(/<h1.*>(.+)<\/h1>/)[1];
+    title = title.replace(pattern, '');
+    
+    article = article.replace(/<h1.*>.+<\/h1>/, '');
+    article = article.replace(pattern, '\n');
+
+    return {
+        title: title,
+        article: article
+    };
+}
+
+function removeSpaces(body) {
+    body = body.replace(/<\s*\/\s*(.+)\s*>[\r\n\s]+<?\s*(.+)\s*>/g, '</$1><$2>');
+    return body.replace(/<\s*(.+)\s*\/\s*>[\r\n\s]+<?\s*(.+)\s*>/g, '<$1/><$2>');
 }
 
 function fetchAPost(url, callback) {
