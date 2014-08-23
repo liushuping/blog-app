@@ -1,6 +1,6 @@
 {
   "name": "blog-app",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "scripts": {
     "start": "sudo PORT=80 node ./bin/www"
