@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var routeconfig = require('./routeconfig');
 var errorhandlers = require('./errorhandlers');
 var app = express();
+var cacheTime = 7*24*60*60*1000;
 
 app.disable('x-powered-by');
 
@@ -22,7 +23,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: cacheTime }));
 
 routeconfig.config(app);
 errorhandlers.handle(app)
