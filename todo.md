@@ -8,3 +8,4 @@
 * New comment system
 * Favicon
 * Image system
+* Charity 404 page
