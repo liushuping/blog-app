@@ -1,4 +1,5 @@
 var express = require('express');
+
 var compression = require('compression');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,10 +7,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routeconfig = require('./routeconfig');
+var routes = require('./routes');
 var errorhandlers = require('./errorhandlers');
 var app = express();
-var cacheTime = 7*24*60*60*1000;
+var cacheTime = 7 * 24 * 60 * 60 * 1000;
 
 app.disable('x-powered-by');
 
@@ -25,7 +26,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: cacheTime }));
 
-routeconfig.config(app);
+routes(app);
 errorhandlers.handle(app)
 
 module.exports = app;
