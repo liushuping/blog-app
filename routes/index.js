@@ -4,6 +4,7 @@ var sitemap = require('./sitemap');
 var rss = require('./rss');
 var home = require('./home');
 var post = require('./post');
+var error = require('./error');
 
 function routes(app) {
 
@@ -18,6 +19,8 @@ function routes(app) {
         err.status = 404;
         next(err);
     });
+
+    app.use(error);
 }
 
 module.exports = routes;

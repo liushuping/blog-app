@@ -8,7 +8,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes');
-var errorhandlers = require('./errorhandlers');
 var app = express();
 var cacheTime = 7 * 24 * 60 * 60 * 1000;
 
@@ -27,6 +26,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: cacheTime }));
 
 routes(app);
-errorhandlers.handle(app)
 
 module.exports = app;
