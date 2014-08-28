@@ -1,5 +1,4 @@
 var level = require('level');
-var cheerio = require('cheerio');
 var request = require('request');
 var postsDB = level('../db/posts');
 var Minimize = require('minimize');
@@ -9,7 +8,6 @@ var postsPath = 'https://raw.githubusercontent.com/liushuping/blog/master/posts.
     
 function updateAnPost(folder, post) {
     fetchAPost(path + folder + '/' + post.path, function(body) {
-        var $ = cheerio.load(body);
         extract(body, function(err, data) {
             post.title = data.title;
             post.slug = post.title;
