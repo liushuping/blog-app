@@ -9,3 +9,5 @@
 * Favicon
 * Image system
 * Charity 404 page
+* Add unit tests
+* Extract generator as a new module
