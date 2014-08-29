@@ -5,6 +5,7 @@
 * Change link in posts to be relative path
 * ✔ Set cache time
 * Extract settings for blog
+* Move settings in blog repo
 * New comment system
 * Favicon
 * Image system
