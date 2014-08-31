@@ -4,7 +4,7 @@
 * Change license for blog repository to CC
 * [remove] Change link in posts to be relative path
 * ✔ Set cache time
-* Extract settings for blog
+* ✔ Extract settings for blog
 * Move settings in blog repo
 * New comment system
 * Favicon
