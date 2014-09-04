@@ -12,9 +12,11 @@ router.get('/', function(req, res) {
 	var body = {
 	    posts: posts,
 	    title: title,
+	    author: settings.site_owner,
 	    canonical: settings.site_home,
 	    keywords: settings.site_keywords,
-	    description: settings.description
+	    description: settings.site_description,
+	    metas: settings.site_metas
         };
 
         res.render('home', body);

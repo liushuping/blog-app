@@ -25,6 +25,7 @@ function handler(req, res, next) {
 
 	post.description = post.title + ' | ' + settings.post_title_addon;
 	post.keywords = post.tags.join(',');
+        post.author = settings.site_owner;
 	post.created_on = extractDate(post.created_on);
 
         var url = req.params.id + '/' + slug;

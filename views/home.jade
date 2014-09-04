@@ -1,5 +1,10 @@
 extends layout
 
+block meta
+  each meta in metas
+    meta(name=meta.name, content=meta.content)
+
+
 block head
   link(rel='stylesheet', href='/stylesheets/index.css')
 
