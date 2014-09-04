@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var params = require('express-params');
 var posts = require('../lib/posts');
+var settings = require('../lib/settings');
 
 params.extend(router);
 
@@ -22,12 +23,12 @@ function handler(req, res, next) {
 
         var slug = post.slug;
 
-	post.description = post.title + '-刘淑平的Blog';
+	post.description = post.title + ' | ' + settings.post_title_addon;
 	post.keywords = post.tags.join(',');
 	post.created_on = extractDate(post.created_on);
 
-        var url = '/' + req.params.id + '/' + slug;
-	post.canonical = 'http://blog.liushuping.com' + url;
+        var url = req.params.id + '/' + slug;
+	post.canonical = settings.site_home+ url;
 
         if (req.params.slug != slug) {
             res.redirect(url);
