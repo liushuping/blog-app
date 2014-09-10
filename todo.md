@@ -12,3 +12,4 @@
 * Charity 404 page
 * Add unit tests
 * Extract generator as a new module
+* Add an admin page for refreshing post repo
